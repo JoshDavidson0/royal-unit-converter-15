@@ -1,20 +1,11 @@
 import { useConverterStore, type FavoriteConversion } from '@/store/converterStore';
 import { categories } from '@/lib/conversions';
-import { Star, X } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 export function FavoritesBar() {
-  const { favorites, setCategory, setFromUnit, setToUnit } = useConverterStore();
+  const { favorites, loadFavorite } = useConverterStore();
 
   if (favorites.length === 0) return null;
-
-  const loadFav = (fav: FavoriteConversion) => {
-    setCategory(fav.category);
-    // Small delay so category state settles before setting units
-    setTimeout(() => {
-      useConverterStore.getState().setFromUnit(fav.fromUnit);
-      useConverterStore.getState().setToUnit(fav.toUnit);
-    }, 0);
-  };
 
   return (
     <div className="px-4 animate-fade-in">
@@ -30,9 +21,11 @@ export function FavoritesBar() {
           return (
             <button
               key={fav.id}
-              onClick={() => loadFav(fav)}
+              onClick={() => loadFavorite(fav)}
               className="flex-shrink-0 flex items-center gap-1.5 bg-muted/50 hover:bg-muted
-                text-xs text-foreground px-3 py-2 rounded-lg transition-smooth"
+                text-xs text-foreground px-3 py-2 rounded-lg transition-smooth
+                focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
+                focus-visible:ring-offset-background active:scale-[0.98]"
             >
               <cat.icon size={12} className="text-secondary" />
               {from.abbr} → {to.abbr}

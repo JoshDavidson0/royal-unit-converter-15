@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { categories } from '@/lib/conversions';
+import { categories, getCategory } from '@/lib/conversions';
 
 export interface FavoriteConversion {
   id: string;
@@ -20,6 +20,7 @@ interface ConverterState {
   setToUnit: (key: string) => void;
   setInputValue: (val: string) => void;
   swapUnits: () => void;
+  loadFavorite: (fav: FavoriteConversion) => void;
   toggleFavorite: () => void;
   isFavorite: () => boolean;
 }
@@ -51,12 +52,15 @@ export const useConverterStore = create<ConverterState>((set, get) => {
     favorites: loadFavorites(),
 
     setCategory: (key) => {
-      const cat = categories.find((c) => c.key === key);
+      const cat = getCategory(key);
       if (!cat) return;
+      const units = cat.units;
+      const fromKey = units[0]?.key ?? '';
+      const toKey = units[1]?.key ?? units[0]?.key ?? '';
       set({
         category: key,
-        fromUnit: cat.units[0].key,
-        toUnit: cat.units[1].key,
+        fromUnit: fromKey,
+        toUnit: toKey,
         inputValue: '1',
       });
     },
@@ -68,6 +72,16 @@ export const useConverterStore = create<ConverterState>((set, get) => {
     swapUnits: () => {
       const { fromUnit, toUnit } = get();
       set({ fromUnit: toUnit, toUnit: fromUnit });
+    },
+
+    loadFavorite: (fav) => {
+      const cat = getCategory(fav.category);
+      if (!cat) return;
+      const fromExists = cat.units.some((u) => u.key === fav.fromUnit);
+      const toExists = cat.units.some((u) => u.key === fav.toUnit);
+      const fromUnit = fromExists ? fav.fromUnit : cat.units[0]?.key ?? '';
+      const toUnit = toExists ? fav.toUnit : cat.units[1]?.key ?? cat.units[0]?.key ?? '';
+      set({ category: fav.category, fromUnit, toUnit });
     },
 
     toggleFavorite: () => {

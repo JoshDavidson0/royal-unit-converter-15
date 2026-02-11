@@ -16,6 +16,8 @@ export function CategorySelector() {
             className={`
               flex flex-col items-center gap-1.5 px-5 py-3 rounded-xl
               transition-smooth min-w-[80px]
+              active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary
+              focus-visible:ring-offset-2 focus-visible:ring-offset-background
               ${isActive
                 ? 'bg-primary/20 text-secondary glow-primary'
                 : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
