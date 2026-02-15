@@ -1,7 +1,7 @@
 # Welcome to your Lovable project
 
 ## Project info
-- This project was vibe coded with Gemini, Lovable, and Cursor.
+- This project was vibe coded with Gemini, Lovable, and Cursor in order to gain familiarity with ai tools.
   
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
